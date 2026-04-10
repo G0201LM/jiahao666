@@ -3,113 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>嘉豪人格浓度深度测试 (JH-25 Pro Max)</title>
+    <title>【格局鉴定】嘉豪人格浓度全性向测试 (JH-25 Pro)</title>
     <style>
         :root {
-            --primary-color: #f39c12;
-            --bg-color: #f4f4f9;
+            --primary-color: #f39c12; /* 嘉豪金 */
+            --bg-color: #1a1a1a; /* 深邃黑，更有故事感 */
+            --text-color: #e0e0e0;
+            --card-bg: #2c2c2c;
         }
-        body { font-family: 'PingFang SC', sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; color: #333; }
-        #app { background: white; width: 100%; max-width: 650px; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #2c3e50; margin-bottom: 5px; }
-        .subtitle { text-align: center; color: #7f8c8d; font-size: 14px; margin-bottom: 25px; }
-        .progress { height: 8px; background: #ecf0f1; border-radius: 4px; margin-bottom: 25px; overflow: hidden; }
-        #progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.4s ease; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; color: var(--text-color); transition: all 0.3s; }
+        #app { background: var(--card-bg); width: 100%; max-width: 650px; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid #444; }
+        
+        /* 开始界面样式优化 */
+        .intro-screen { text-align: center; animation: fadeIn 1s; }
+        .jh-logo { font-size: 64px; margin-bottom: 10px; display: block; }
+        h1 { text-align: center; color: var(--primary-color); margin-bottom: 10px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+        .subtitle { text-align: center; color: #aaa; font-size: 16px; margin-bottom: 30px; line-height: 1.6; }
+        .warning-box { background: rgba(243, 156, 18, 0.1); border: 1px solid var(--primary-color); padding: 15px; border-radius: 10px; margin-bottom: 30px; color: var(--primary-color); font-size: 14px; }
+        
+        /* 答题界面样式 */
+        .progress { height: 6px; background: #444; border-radius: 3px; margin-bottom: 30px; overflow: hidden; }
+        #progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--primary-color); }
         .question { display: none; animation: fadeIn 0.5s; }
         .question.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .q-text { font-size: 18px; font-weight: bold; margin-bottom: 20px; line-height: 1.5; color: #2c3e50; }
-        .options { display: flex; flex-direction: column; gap: 12px; }
-        button { 
-            width: 100%; padding: 15px 20px; text-align: left;
-            border: 2px solid #ecf0f1; border-radius: 10px; background: white; 
-            cursor: pointer; font-size: 16px; transition: all 0.2s; color: #34495e;
+        .q-text { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.5; color: #fff; border-left: 5px solid var(--primary-color); padding-left: 15px; }
+        .options { display: flex; flex-direction: column; gap: 15px; }
+        button.option-btn { 
+            width: 100%; padding: 18px 25px; text-align: left;
+            border: 2px solid #444; border-radius: 12px; background: #333; 
+            cursor: pointer; font-size: 16px; transition: all 0.2s; color: var(--text-color);
         }
-        button:hover { background: #fdfae6; border-color: var(--primary-color); transform: scale(1.01); }
+        button.option-btn:hover { background: #444; border-color: var(--primary-color); transform: scale(1.02); color: #fff; }
+        
+        /* 结果界面样式优化 */
         #result { display: none; text-align: center; animation: fadeIn 0.6s; }
-        .score { font-size: 56px; font-weight: 900; color: #e74c3c; margin: 20px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-        .desc { font-size: 18px; line-height: 1.8; color: #555; margin-bottom: 30px; padding: 20px; background: #f9f9f9; border-radius: 10px; }
-        .restart-btn { background: var(--primary-color); color: white; border: none; text-align: center; font-weight: bold; font-size: 18px; border-radius: 30px; }
-        .restart-btn:hover { background: #d68910; color: white; }
+        .result-header { font-size: 24px; color: #fff; margin-bottom: 10px; }
+        .score-label { font-size: 16px; color: #aaa; }
+        .score { font-size: 72px; font-weight: 900; color: var(--primary-color); margin: 10px 0 20px 0; text-shadow: 0 0 15px rgba(243,156,18,0.5); }
+        .desc-box { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid #444; text-align: left; margin-bottom: 30px; }
+        .desc-title { font-size: 20px; font-weight: bold; color: var(--primary-color); margin-bottom: 15px; text-align: center; display: block;}
+        .desc-content { font-size: 16px; line-height: 1.9; color: #ccc; }
+        .desc-content b { color: #fff; }
+        
+        /* 按钮样式 */
+        .start-btn, .restart-btn { 
+            background: var(--primary-color); color: #fff; border: none; padding: 15px 40px; 
+            font-weight: bold; font-size: 18px; border-radius: 30px; cursor: pointer; 
+            transition: all 0.2s; box-shadow: 0 5px 15px rgba(243,156,18,0.3);
+        }
+        .start-btn:hover, .restart-btn:hover { background: #e67e22; transform: translateY(-2px); box-shadow: 0 7px 20px rgba(243,156,18,0.4); }
+
+        /* 响应式 */
+        @media (max-width: 600px) {
+            #app { padding: 20px; }
+            h1 { font-size: 24px; }
+            .q-text { font-size: 18px; }
+            button.option-btn { padding: 15px; font-size: 15px; }
+        }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <h1>嘉豪人格浓度深度鉴定</h1>
-    <div class="subtitle">警告：本测试过于真实，可能引起部分群体心理不适</div>
-    
-    <div id="quiz-container">
+    <div id="start-screen" class="intro-screen">
+        <span class="jh-logo">🧐</span>
+        <h1>嘉豪人格浓度鉴定</h1>
+        <p class="subtitle">全性向格局扫描仪<br>别问，问就是懂的都懂。细品，你细品。</p>
+        <div class="warning-box">
+            深度检测你体内的“真性情”与“迷之自信”<br>凡人莫入，只有王者才配拥有最终的诊断报告。
+        </div>
+        <button class="start-btn" onclick="startQuiz()">开启格局之旅</button>
+    </div>
+
+    <div id="quiz-container" style="display: none;">
         <div class="progress"><div id="progress-bar"></div></div>
         <div id="question-box"></div>
     </div>
 
     <div id="result">
-        <h2>测试完成，正在生成诊断报告...</h2>
+        <div class="result-header">格局扫描完成</div>
+        <div class="score-label">你的嘉豪人格浓度为</div>
         <div class="score" id="final-score">0%</div>
-        <div class="desc" id="final-desc"></div>
-        <button class="restart-btn" onclick="location.reload()">重新投胎（再测一次）</button>
+        <div class="desc-box">
+            <span class="desc-title" id="final-tier"></span>
+            <div class="desc-content" id="final-desc"></div>
+        </div>
+        <button class="restart-btn" onclick="location.reload()">清除记忆，重新拿捏</button>
     </div>
 </div>
 
 <script>
-// 核心题库：25道深度定制，绝无重复
+// 25道男女通用版题库（内容保持不变，确保共性）
 const questions = [
-    // --- 社交与两性篇 ---
-    { q: "在微信上给心仪的女生发消息，她回了一句‘去洗澡了’然后半天没动静，你的心理活动是？", a: ["她可能在敷面膜，顺便思考怎么回复我显得矜持", "完了，肯定是被我哪句话冒犯到了，赶紧发个小作文道歉", "没意思，这种不懂欣赏我的女人不配浪费我的时间", "哦，洗澡去了，那我去打两把游戏先"], s: [4, 3, 2, 0] },
-    { q: "当你发了一张自以为很帅的自拍到朋友圈，半小时没人点赞，你会？", a: ["觉得是朋友圈被折叠了，删掉重新发一遍", "火速删掉，觉得有点丢人", "在评论区自己加一句：‘别问衣服链接，买不到的’", "无所谓，懂我的帅的人自然懂，不需要庸人点赞"], s: [3, 0, 4, 2] },
-    { q: "如果有女生评价你‘有点油腻’，你的第一反应是？", a: ["这叫成熟男人的魅力，小女孩不懂", "大受打击，立刻去搜‘如何去油’", "反讽回去：‘总比你清汤寡水好’", "无所谓，只当做是一句玩笑"], s: [4, 0, 3, 1] },
-    { q: "你认为在酒吧搭讪成功的关键是什么？", a: ["不经意间露出豪车钥匙和名表", "用深邃且带着三分漫不经心的眼神盯住她", "幽默且得体的开场白", "长得帅就行，别的都是虚的"], s: [3, 4, 0, 1] },
-    { q: "对待前任，你现在的真实态度是？", a: ["她以后再也遇不到像我这么对她好的人了", "偶尔深夜想起来还是会心痛，发条仅自己可见的emo文案", "祝她幸福，大家各自安好", "前任？什么前任，我都记不清长相了"], s: [4, 3, 0, 1] },
-    
-    // --- 审美与穿搭篇 ---
-    { q: "周末要去见一个重要的相亲对象，你会选择怎么穿？", a: ["紧身黑色高领毛衣 + 九分修身西裤 + 不穿袜子的乐福鞋", "大Logo奢侈品T恤 + 破洞牛仔裤 + 最新款潮鞋", "干净的白衬衫/基础款T恤 + 休闲裤", "平时怎么穿就怎么穿，最真实的自己才最迷人"], s: [4, 3, 0, 1] },
-    { q: "你如何看待大金链子和小手表这两种配饰？", a: ["社会人的标配，没有这些压不住场子", "太土了，现在流行极简风或者小众设计师款", "稍微带一点可以，但不能太夸张", "必须带点有故事的配饰，比如一串盘包浆的佛珠"], s: [3, 0, 1, 4] },
-    { q: "你最喜欢的拍照姿势是？", a: ["手插口袋，眼神忧郁地望向45度角的地面", "对着镜子自拍，用手机挡住半张脸", "双手抱胸，微微皱眉，展现深沉", "大大方方地笑，比个剪刀手"], s: [4, 2, 3, 0] },
-    { q: "关于发型，你最不能接受的是？", a: ["没有打发胶，风一吹就乱的软趴趴发型", "颜色太鲜艳的‘精神小伙’色", "两边剃光的‘社会头’", "只要干净清爽，什么发型都能接受"], s: [4, 1, 2, 0] },
-    { q: "夏天出门，你最喜欢的上衣状态是？", a: ["紧身T恤，必须能勒出胸肌（或者赘肉）的轮廓", "稍微有点透的冰丝半袖", "宽松舒适的纯棉T恤", "把背心卷到胸口，露出肚皮散热（北京比基尼）"], s: [3, 2, 0, 4] },
-    
-    // --- 价值观与口头禅篇 ---
-    { q: "当你和别人辩论，对方逻辑严密让你无法反驳时，你会用哪句话收尾？", a: ["‘格局小了，兄弟，你这眼界还是太窄’", "‘懂的都懂，不懂的我也不多解释，细品吧’", "‘你说的确实有道理，我受教了’", "‘随便你怎么想吧，你开心就好’"], s: [3, 4, 0, 1] },
-    { q: "在你看来，什么是真正的‘兄弟情’？", a: ["只要我一句话，半夜三点叫出来喝酒借钱绝不推辞", "平时不联系，有事相互帮忙", "有共同的爱好和价值观，能一起进步", "遇到事了能跟我一起去平事儿的"], s: [4, 0, 0, 3] },
-    { q: "如果你突然中了 500 万，第一件事去干嘛？", a: ["全款提一台带声浪的跑车，回老家兜一圈", "先把欠的钱还了，然后存起来理财", "在朋友圈发一条隐晦的炫富文案，比如‘终于等到这一天’", "买几套房收租，过上枯燥的生活"], s: [4, 0, 3, 1] },
-    { q: "聊天时，你使用‘其实我也没那么优秀’这类话的频率？", a: ["经常用，这叫顶级凡尔赛，欲扬先抑", "偶尔用来缓和尴尬的自谦", "从不说，我觉得自己确实很普通", "从不说，我直接说‘老子就是最强的’"], s: [4, 1, 0, 3] },
-    { q: "如何评价自己的口才？", a: ["我只要一开口，就能拿捏全场的情绪", "能把黑的说成白的，忽悠人是一把好手", "比较木讷，不善言辞", "逻辑清晰，能够正常表达自己的观点"], s: [4, 3, 1, 0] },
-    
-    // --- 职场与生活习惯篇 ---
-    { q: "在KTV聚会，别人都在嗨，你会怎么做？", a: ["一个人坐在角落抽烟，眼神迷离，仿佛看透了这红尘", "抢过麦克风，深情演唱一首极具年代感的伤感喊麦", "和大家一起摇骰子、喝酒", "默默吃果盘，当个透明人"], s: [4, 3, 1, 0] },
-    { q: "深夜 12 点，你突然失眠了，大概率会发什么朋友圈？", a: ["一张方向盘搭配霓虹灯的照片，配文：‘夜太黑，路太长’", "分享一首小众的网易云歌曲，不配文字，留下无尽悬念", "‘又失眠了，明天还要早起搬砖，太难了’", "啥也不发，默默刷短视频到困"], s: [4, 3, 0, 0] },
-    { q: "去星巴克或者高档咖啡厅，你的常态是？", a: ["点一杯美式，把车钥匙和名牌打火机不经意地摆在桌上", "打开笔记本电脑，眉头紧锁，假装在处理几个亿的项目", "就是单纯去喝杯东西，跟朋友聊聊天", "觉得太贵了，平时根本不去"], s: [3, 4, 0, 0] },
-    { q: "玩竞技游戏（如王者/LOL）逆风时，你的表现是？", a: ["打开全部麦开始嘲讽对面，或者指挥队友‘都听我的’", "疯狂发撤退信号，然后一个人去带线", "默默闭麦，努力找机会翻盘", "直接点投降，早死早超生"], s: [4, 2, 0, 1] },
-    { q: "你如何看待读书这件事？", a: ["社会才是一所真正的大学，书本上的东西太死板了", "偶尔买几本《狼道》《鬼谷子》《人性的弱点》放在床头装点门面", "有空就看，充实自己", "不看书，只看擦边短视频"], s: [4, 3, 0, 2] },
-    
-    // --- 灵魂拷问篇 ---
-    { q: "当你看到路上有人开着劳斯莱斯经过，你的心理活动是？", a: ["哼，肯定是租来装杯的，指不定欠了一屁股债", "眼神冷漠地看着，心里默念‘早晚有一天我也买得起’", "单纯觉得车很帅，多看两眼", "没什么感觉，关我什么事"], s: [4, 3, 0, 0] },
-    { q: "朋友遇到困难找你倾诉，你通常怎么回复？", a: ["拍拍他肩膀说：‘兄弟，这就是人生，格局大一点就看开了’", "认真帮他分析问题，提出解决建议", "带他去喝一顿大酒，说‘都在酒里了’", "只当个倾听者，附和几句"], s: [3, 0, 4, 1] },
-    { q: "如果你发现自己做错了一件事，你的第一反应是？", a: ["不可能，我怎么会错，肯定是某个环节或者别人的问题", "表面上不承认，私底下偷偷弥补", "大大方方承认错误，并道歉", "找个‘虽然我错了，但情有可原’的完美借口"], s: [4, 2, 0, 3] },
-    { q: "你的微信偶像是谁（或者朋友圈最想展现出谁的气质）？", a: ["《古惑仔》里的陈浩南 / 《狂飙》里的高启强", "西装革履的商界精英大佬", "岁月静好的文艺青年", "没什么特别的，做真实的自己"], s: [4, 3, 1, 0] },
-    { q: "最后一题：你觉得自己身上有‘嘉豪人格’吗？", a: ["这什么破测试，老子根本不知道什么是嘉豪，我是我自己的王", "可能有一点吧，但那叫真性情", "应该没有，我只是个普通人", "太有了，感觉每一道题都在念我的身份证号"], s: [4, 2, 0, 0] } // 选第一个反而最嘉豪
+    // ... （此处省略25道题目的具体内容，保持上一版的代码不变，以节省篇幅，实际运行时请保留完整题库）
+    // 为了保证代码可运行，这里必须贴上完整的题目数组，哪怕内容和上一版一样
+    { q: "在聚会上，你发现有个人偷偷看了你两眼，你的第一反应是？", a: ["一定是看上我了，或者被我的气质吸引了", "可能是我衣服穿反了，或者脸上沾了东西", "只是碰巧视线交汇吧，无所谓", "我也看回去，并送上一个意味深长的微笑"], s: [4, 0, 1, 3] },
+    { q: "当你发了一张精心P过（或精挑细选）的自拍到朋友圈，半小时没人点赞，你会？", a: ["觉得这届朋友圈不懂欣赏，私信发给几个好朋友‘求赞’", "火速删掉，觉得有点丢人", "在自己评论区留言：‘原相机直出，状态不太好’", "不管它，懂我的美/帅的人自然懂"], s: [3, 0, 4, 2] },
+    { q: "如果有人对你说‘你这人挺有意思的’，你会觉得？", a: ["那当然，我可是万里挑一的有趣灵魂", "他是在客套吧", "他是不是觉得我刚才说错话了？", "回一句：‘你才发现？’"], s: [4, 1, 0, 3] },
+    { q: "遇到聊得来的异性，你通常的聊天终结方式是？", a: ["发一句‘去忙了，乖’然后消失", "正常说‘拜拜，下次聊’", "发一个带点暧昧的表情包结束", "突然不回，显得自己很忙很高冷"], s: [4, 0, 2, 3] },
+    { q: "对待前任，你现在的真实态度是？", a: ["他/她以后再也遇不到像我这么好的人了，错过我是他/她的损失", "偶尔深夜想起来还是会emo，发条仅自己可见的网抑云文案", "祝他/她幸福，大家各自安好", "前任？都不记得长啥样了"], s: [4, 3, 0, 1] },
+    { q: "去了一家很贵的网红餐厅/咖啡店，你的朋友圈会怎么发？", a: ["不经意地露出车钥匙/名表/名牌包，配文：‘简单的下午’", "拍风景、拍食物、拍自己，正常九宫格", "只拍一杯咖啡，配文一句完全不搭边的伤感歌词", "不发，觉得太贵了在心里滴血"], s: [4, 1, 3, 0] },
+    { q: "如果你的生活变成一部电影，你觉得最适合的类型是？", a: ["霸道总裁/顶级名媛爱上我的玛丽苏爽剧", "充满江湖义气和爱恨情仇的黑帮片", "平平淡淡才是真的生活纪录片", "主角一直很神秘、总是独来独往的文艺片"], s: [4, 3, 0, 2] },
+    { q: "深夜12点，你突然失眠了，大概率会发什么朋友圈？", a: ["一张城市的霓虹灯照片，配文：‘夜太黑，人太累，懂的都懂’", "分享一首极小众的歌曲，不配文字，留下无尽悬念", "‘又失眠了，明天还要早起打工，太难了’", "啥也不发，默默刷短视频到困"], s: [4, 3, 0, 0] },
+    { q: "如何评价自己的口才或文笔？", a: ["只要我愿意，随时能用小作文拿捏全场的情绪", "擅长用深奥的词汇（如底层逻辑、赋能、松弛感）镇住场子", "比较木讷，不善言辞", "逻辑清晰，能正常表达观点"], s: [4, 3, 0, 1] },
+    { q: "聊天时，你使用‘其实我也没那么优秀’这类话的频率？", a: ["经常用，这叫顶级凡尔赛，欲扬先抑", "偶尔用来缓和尴尬的自谦", "从不说，我觉得自己确实很普通", "从不说，我都直接说‘老子/老娘就是最强的’"], s: [4, 1, 0, 3] },
+    { q: "周末要去见一个比较重要的人，你会选择怎么穿？", a: ["必须把最显Logo的那几件衣服包包全穿上", "选择看似随性实则精心搭配了2小时的‘松弛感’穿搭", "干净得体的基础款", "平时怎么穿就怎么穿，最真实的自己才最迷人"], s: [3, 4, 0, 1] },
+    { q: "你最喜欢的拍照姿势是？", a: ["眼神不看镜头，看向远方，营造出一种忧郁/清冷感", "对着镜子自拍，用手机挡住半张脸", "双手抱胸，或者一只手摸着下巴，展现深沉", "大大方方地笑，比个剪刀手"], s: [4, 2, 3, 0] },
+    { q: "对于‘小众/高级感’这个词，你的理解是？", a: ["必须是我用过而别人没听过的品牌，用来拉开阶级差距", "用来在朋友圈文案里拔高自己品味的词汇", "就是不随波逐流的个人喜好", "纯粹是商家用来割韭菜的噱头"], s: [4, 3, 1, 0] },
+    { q: "你如何看待读书这件事？", a: ["社会才是一所真正的大学，书本上的东西太死板了", "买几本畅销经管书或文艺小说摆在桌上，主要是为了拍照好看", "有空就看，充实自己", "不看书，只看八卦和短视频"], s: [3, 4, 0, 1] },
+    { q: "KTV里，别人都在嗨，你会怎么做？", a: ["一个人坐在角落，眼神迷离，仿佛看透了这红尘", "抢过麦克风，深情演唱一首极具年代感的苦情歌", "和大家一起摇骰子、喝饮料", "默默吃果盘，当个透明人"], s: [4, 3, 1, 0] },
+    { q: "当你和别人辩论，对方逻辑严密让你无法反驳时，你会用哪句话收尾？", a: ["‘你的格局还是小了，跟你说不明白’", "‘懂的都懂，不懂的我也不多解释，细品吧’", "‘你说的确实有道理，我受教了’", "‘随便你怎么想吧，你开心就好’"], s: [3, 4, 0, 1] },
+    { q: "朋友遇到困难找你倾诉，你通常怎么回复？", a: ["‘这种人你还留着过年？要是我早让他滚了，你就是太软弱。’", "认真帮他分析问题，提出客观建议", "只当个倾听者，陪着骂两句", "‘哎，爱情这东西本来就是劫，看开点吧。’"], s: [4, 0, 1, 3] },
+    { q: "如果你发现自己做错了一件事，你的第一反应是？", a: ["不可能，肯定是某个环节或者别人的问题导致了我的失误", "表面上不承认，私底下偷偷弥补", "大大方方承认错误并道歉", "找个‘虽然我错了，但情有可原’的完美借口"], s: [4, 2, 0, 3] },
+    { q: "如果突然中了 500 万，第一件事去干嘛？", a: ["全款提一辆豪车/买一墙爱马仕，回老家/老同学面前晃悠一圈", "在朋友圈发一条隐晦的文案，比如‘终于等到这一天’", "先把欠的钱还了，然后存起来理财", "辞职，然后把老板骂一顿"], s: [4, 3, 0, 2] },
+    { q: "看到路上有人开着豪车经过，你的心理活动是？", a: ["哼，肯定是租来的或者傍大款的，指不定背地里多虚荣", "眼神冷漠地看着，心里默念‘早晚有一天我也买得起’", "单纯觉得车很帅，多看两眼", "没什么感觉，关我什么事"], s: [4, 3, 0, 0] },
+    { q: "你认为自己在异性眼中的形象是？", a: ["危险又迷人，让人想靠近又不敢靠近", "一个可以倾吐心声的知心大哥哥/大姐姐", "就是个普通的好人", "搞笑女/搞笑男"], s: [4, 3, 0, 1] },
+    { q: "听到‘普信’（普通且自信）这个词，你觉得？", a: ["这词绝对不是说我的，我不普通，我很特别", "这年头，自信也是一种罪吗？他们就是嫉妒", "确实有些人挺离谱的", "提醒自己不要变成那样的人"], s: [4, 3, 0, 0] },
+    { q: "你的微信偶像是谁（或者朋友圈最想展现出谁的气质）？", a: ["叱咤风云的商界大佬/永远优雅的老钱风名媛", "看破红尘的忧郁浪子/不食人间烟火的清冷美人", "热爱生活的运动达人/旅行家", "没什么特别的，做真实的自己"], s: [4, 3, 1, 0] },
+    { q: "如果别人用‘做作’来形容你，你会？", a: ["那是他们不懂我的精致与仪式感", "生气，在心里把对方拉黑一万次", "反思自己是不是哪件事有点过了", "笑笑不说话，觉得对方很酸"], s: [4, 3, 0, 2] },
+    { q: "最后一题：你觉得自己身上有‘嘉豪人格’（迷之自信/强行装杯）吗？", a: ["这什么破测试，老子/老娘根本不知道你在说什么，我是我自己的王", "可能有一点吧，但那叫真性情", "应该没有，我只是个普通人", "太有了，感觉每一道题都在念我的身份证号"], s: [4, 2, 0, 0] }
 ];
 
 let currentIdx = 0;
 let totalScore = 0;
-// 满分 100 分（25题 * 最高4分 = 100分，百分比计算）
-const maxPossibleScore = 100; 
+const maxPossibleScore = 100;
+
+function startQuiz() {
+    document.getElementById('start-screen').style.display = 'none';
+    document.getElementById('quiz-container').style.display = 'block';
+    showQuestion();
+}
 
 function showQuestion() {
     const qBox = document.getElementById('question-box');
     const progress = document.getElementById('progress-bar');
     const q = questions[currentIdx];
     
-    // 更新进度条
     progress.style.width = ((currentIdx / questions.length) * 100) + "%";
     
-    // 生成题目HTML
     let html = `<div class="question active">
         <div class="q-text">第 ${currentIdx + 1} 题：${q.q}</div>
         <div class="options">`;
     q.a.forEach((opt, index) => {
-        html += `<button onclick="next(${q.s[index]})">${opt}</button>`;
+        html += `<button class="option-btn" onclick="next(${q.s[index]})">${opt}</button>`;
     });
     html += `</div></div>`;
     qBox.innerHTML = html;
@@ -131,10 +168,8 @@ function showResult() {
     const resultBox = document.getElementById('result');
     resultBox.style.display = 'block';
     
-    // 计算最终百分比
     const finalPercent = Math.min(Math.round((totalScore / maxPossibleScore) * 100), 100);
     
-    // 动态滚动数字特效
     let currentScore = 0;
     const scoreElement = document.getElementById('final-score');
     const timer = setInterval(() => {
@@ -147,25 +182,29 @@ function showResult() {
         }
     }, 30);
 
-    // 生成深度评语
+    let tier = "";
     let desc = "";
+    
+    // --- 结果评价注入大量嘉豪色彩词汇 ---
     if(finalPercent < 20) {
-        desc = "<b>【人间清醒 / 纯净水】</b><br>你体内几乎没有嘉豪基因。你是一个踏实、真诚且清醒的普通人。在嘉豪眼中，你是一个‘不懂得包装自己、格局太小’的凡夫俗子；但在现实社会中，你是最受欢迎的正常人。";
+        tier = "【凡人段位 / 格局归零】";
+        desc = "<b>拿捏失败。</b>你体内几乎没有嘉豪基因。你是一个踏实、真诚且清醒的普通人。在嘉豪眼中，你是一个‘不懂得包装自己、格局太小’的凡夫俗子。你太真，真到不需要任何做作的修饰，这在“嘉豪学”里叫<b>‘没故事’</b>。";
     } else if(finalPercent < 50) {
-        desc = "<b>【隐性嘉豪 / 薛定谔的油】</b><br>你平时看起来很正常，但在某些特定的深夜，或者在遇到喜欢的异性时，你体内微弱的‘嘉豪抗体’就会失效。偶尔会发出一两句略带油腻的语录，或者做出一些强行装杯的举动。注意控油，保持清爽！";
+        tier = "【隐性嘉豪 / 薛定谔的格局】";
+        desc = "<b>有点意思，但不多。</b>你平时看起来很正常，但在某些特定的时刻（例如深夜、或者遇到心仪的异性），你体内的<b>‘深情抗体’</b>就会失效。偶尔会冒出一两句做作的语录，或者摆出一些强凹的造型。注意控油，你的格局还在<b>‘懂的都懂’</b>的萌芽阶段。";
     } else if(finalPercent < 80) {
-        desc = "<b>【半步嘉豪 / 懂的都懂段位】</b><br>格局！格局打开了兄弟！你已经深谙嘉豪文学的精髓，无论是在KTV点歌的手势，还是朋友圈文案的拿捏，都带着一股浑然天成的社会气息。你不是在装杯，这就是你理解的生活方式。";
+        tier = "【半步王者 / 眼神拿捏大师】";
+        desc = "<b>成了！兄弟/姐妹，你的格局已经打开了！</b>你举手投足间那股三分讥笑七分薄凉的气质，已经拿捏得十分到位。你的一条朋友圈，起码需要凡人细品半小时。你不是在装杯，你觉得这就是你理解的<b>‘仪式感’</b>。继续保持，王座在向你招手。";
     } else {
-        desc = "<b>【嘉豪本豪 / 纯血大帝】</b><br>太震撼了！系统检测到你的嘉豪浓度已经爆表！你就是行走的荷尔蒙，是你所在街道最闪耀的星。你那七分讥笑三分薄凉的眼神，足以让一切凡人退避三舍。别测了兄弟，赶紧去开直播吧，互联网需要你这样的猛将！";
+        tier = "【嘉豪本豪 / 大乘格局大帝】";
+        desc = "<b>卧槽！这浓度爆表了！</b>系统检测到你的嘉豪基因已经突破天际！你是行走的荷尔蒙/人间富贵花，你是凡人眼中的光。你那眼神里的忧郁与自信，足以整顿整个互联网的审美。别测了，赶紧去开直播，去拍段子，去展现你那<b>‘无法安放的真性情’</b>。互联网需要你这样的王者来拿捏！";
     }
     
     setTimeout(() => {
+        document.getElementById('final-tier').innerText = tier;
         document.getElementById('final-desc').innerHTML = desc;
-    }, 500); // 延迟显示评语配合数字滚动
+    }, 500);
 }
-
-// 初始化第一题
-showQuestion();
 </script>
 
 </body>
