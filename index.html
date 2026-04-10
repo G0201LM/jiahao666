@@ -3,101 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>【格局鉴定】嘉豪人格浓度全性向测试 (JH-25 Pro)</title>
+    <title>【格局鉴定】嘉豪MBTI人格全性向测试 (深度解析版)</title>
     <style>
         :root {
-            --primary-color: #f39c12; /* 嘉豪金 */
-            --bg-color: #1a1a1a; /* 深邃黑，更有故事感 */
+            --primary-color: #ffaa00; 
+            --bg-color: #121212; 
             --text-color: #e0e0e0;
-            --card-bg: #2c2c2c;
+            --card-bg: #1e1e1e;
+            --danger-color: #ff4757;
         }
-        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; color: var(--text-color); transition: all 0.3s; }
-        #app { background: var(--card-bg); width: 100%; max-width: 650px; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid #444; }
+        body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; background: var(--bg-color); display: flex; justify-content: center; padding: 20px; color: var(--text-color); transition: all 0.3s; margin: 0; }
+        #app { background: var(--card-bg); width: 100%; max-width: 680px; padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.8); border: 1px solid #333; position: relative; overflow: hidden; }
         
-        /* 开始界面样式优化 */
+        #app::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,170,0,0.05) 0%, transparent 70%); z-index: 0; pointer-events: none; }
+        .content-wrapper { position: relative; z-index: 1; }
+
         .intro-screen { text-align: center; animation: fadeIn 1s; }
-        .jh-logo { font-size: 64px; margin-bottom: 10px; display: block; }
-        h1 { text-align: center; color: var(--primary-color); margin-bottom: 10px; font-weight: 900; letter-spacing: 2px; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-        .subtitle { text-align: center; color: #aaa; font-size: 16px; margin-bottom: 30px; line-height: 1.6; }
-        .warning-box { background: rgba(243, 156, 18, 0.1); border: 1px solid var(--primary-color); padding: 15px; border-radius: 10px; margin-bottom: 30px; color: var(--primary-color); font-size: 14px; }
+        .jh-logo { font-size: 72px; margin-bottom: 10px; display: block; text-shadow: 0 0 20px rgba(255,170,0,0.5); }
+        h1 { color: var(--primary-color); margin-bottom: 10px; font-weight: 900; font-size: 32px; letter-spacing: 2px; }
+        .subtitle { color: #888; font-size: 15px; margin-bottom: 30px; line-height: 1.6; }
+        .warning-box { background: rgba(255, 71, 87, 0.1); border: 1px solid var(--danger-color); padding: 15px; border-radius: 10px; margin-bottom: 30px; color: var(--danger-color); font-size: 14px; font-weight: bold; }
         
-        /* 答题界面样式 */
-        .progress { height: 6px; background: #444; border-radius: 3px; margin-bottom: 30px; overflow: hidden; }
-        #progress-bar { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--primary-color); }
-        .question { display: none; animation: fadeIn 0.5s; }
+        .progress { height: 6px; background: #333; border-radius: 3px; margin-bottom: 30px; overflow: hidden; }
+        #progress-bar { height: 100%; background: linear-gradient(90deg, #ffaa00, #ff4757); width: 0%; transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 10px var(--primary-color); }
+        .question { display: none; animation: slideIn 0.4s; }
         .question.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .q-text { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.5; color: #fff; border-left: 5px solid var(--primary-color); padding-left: 15px; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .q-text { font-size: 20px; font-weight: bold; margin-bottom: 25px; line-height: 1.6; color: #fff; border-left: 5px solid var(--primary-color); padding-left: 15px; }
         .options { display: flex; flex-direction: column; gap: 15px; }
         button.option-btn { 
             width: 100%; padding: 18px 25px; text-align: left;
-            border: 2px solid #444; border-radius: 12px; background: #333; 
+            border: 2px solid #333; border-radius: 12px; background: #252525; 
             cursor: pointer; font-size: 16px; transition: all 0.2s; color: var(--text-color);
         }
-        button.option-btn:hover { background: #444; border-color: var(--primary-color); transform: scale(1.02); color: #fff; }
+        button.option-btn:hover { background: #333; border-color: var(--primary-color); transform: translateY(-2px); color: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
         
-        /* 结果界面样式优化 */
-        #result { display: none; text-align: center; animation: fadeIn 0.6s; }
-        .result-header { font-size: 24px; color: #fff; margin-bottom: 10px; }
-        .score-label { font-size: 16px; color: #aaa; }
-        .score { font-size: 72px; font-weight: 900; color: var(--primary-color); margin: 10px 0 20px 0; text-shadow: 0 0 15px rgba(243,156,18,0.5); }
-        .desc-box { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 15px; border: 1px solid #444; text-align: left; margin-bottom: 30px; }
-        .desc-title { font-size: 20px; font-weight: bold; color: var(--primary-color); margin-bottom: 15px; text-align: center; display: block;}
-        .desc-content { font-size: 16px; line-height: 1.9; color: #ccc; }
-        .desc-content b { color: #fff; }
+        /* 结果界面专属优化 */
+        #result { display: none; text-align: center; animation: fadeIn 0.8s; }
+        .mbti-card { background: linear-gradient(145deg, #2a2a2a, #1a1a1a); border: 2px solid var(--primary-color); border-radius: 15px; padding: 30px 20px; margin-bottom: 30px; position: relative; box-shadow: 0 0 30px rgba(255,170,0,0.2); }
+        .mbti-type { font-size: 48px; font-weight: 900; color: #fff; text-shadow: 0 0 15px var(--primary-color), 2px 2px 0px var(--danger-color); margin-bottom: 5px; letter-spacing: 4px; }
+        .mbti-name { font-size: 24px; color: var(--primary-color); font-weight: bold; margin-bottom: 20px; display: block; }
+        .score-box { background: rgba(0,0,0,0.5); padding: 10px; border-radius: 8px; display: inline-block; margin-bottom: 20px; }
+        .score-box span { color: var(--danger-color); font-weight: bold; font-size: 20px; }
         
-        /* 按钮样式 */
+        .mbti-desc { text-align: left; font-size: 16px; line-height: 1.8; color: #eee; border-top: 1px dashed #555; padding-top: 20px; margin-bottom: 20px; font-weight: bold; }
+        
+        /* 性格深度分析长文框 */
+        .mbti-analysis { text-align: left; font-size: 15px; line-height: 1.9; color: #bbb; background: #181818; padding: 20px; border-radius: 10px; border-left: 4px solid var(--primary-color); height: 250px; overflow-y: auto; text-indent: 2em; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
+        /* 滚动条美化 */
+        .mbti-analysis::-webkit-scrollbar { width: 8px; }
+        .mbti-analysis::-webkit-scrollbar-track { background: #111; border-radius: 4px; }
+        .mbti-analysis::-webkit-scrollbar-thumb { background: var(--primary-color); border-radius: 4px; }
+        
         .start-btn, .restart-btn { 
-            background: var(--primary-color); color: #fff; border: none; padding: 15px 40px; 
+            background: linear-gradient(45deg, #ffaa00, #ff4757); color: #fff; border: none; padding: 16px 40px; 
             font-weight: bold; font-size: 18px; border-radius: 30px; cursor: pointer; 
-            transition: all 0.2s; box-shadow: 0 5px 15px rgba(243,156,18,0.3);
+            transition: all 0.3s; box-shadow: 0 8px 20px rgba(255,71,87,0.4); width: 100%; max-width: 300px; margin-top: 10px;
         }
-        .start-btn:hover, .restart-btn:hover { background: #e67e22; transform: translateY(-2px); box-shadow: 0 7px 20px rgba(243,156,18,0.4); }
+        .start-btn:hover, .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(255,71,87,0.6); }
 
-        /* 响应式 */
         @media (max-width: 600px) {
-            #app { padding: 20px; }
+            #app { padding: 25px 20px; }
             h1 { font-size: 24px; }
             .q-text { font-size: 18px; }
             button.option-btn { padding: 15px; font-size: 15px; }
+            .mbti-type { font-size: 36px; }
+            .mbti-name { font-size: 20px; }
+            .mbti-analysis { height: 200px; font-size: 14px; }
         }
     </style>
 </head>
 <body>
 
 <div id="app">
-    <div id="start-screen" class="intro-screen">
-        <span class="jh-logo">🧐</span>
-        <h1>嘉豪人格浓度鉴定</h1>
-        <p class="subtitle">全性向格局扫描仪<br>别问，问就是懂的都懂。细品，你细品。</p>
-        <div class="warning-box">
-            深度检测你体内的“真性情”与“迷之自信”<br>凡人莫入，只有王者才配拥有最终的诊断报告。
+    <div class="content-wrapper">
+        <div id="start-screen" class="intro-screen">
+            <span class="jh-logo">😎</span>
+            <h1>嘉豪学 MBTI 人格图鉴</h1>
+            <p class="subtitle">抛弃传统的烂俗测试，直击你灵魂深处的装杯基因。<br>8种专属人格，附带300字贴脸毒舌解析，看你到底是个什么妖魔鬼怪。</p>
+            <div class="warning-box">
+                【高危警告】<br>评语极度辛辣，贴脸开大，直戳肺管子。<br>玻璃心、破防怪请立即退出页面！
+            </div>
+            <button class="start-btn" onclick="startQuiz()">接受灵魂拷问</button>
         </div>
-        <button class="start-btn" onclick="startQuiz()">开启格局之旅</button>
-    </div>
 
-    <div id="quiz-container" style="display: none;">
-        <div class="progress"><div id="progress-bar"></div></div>
-        <div id="question-box"></div>
-    </div>
-
-    <div id="result">
-        <div class="result-header">格局扫描完成</div>
-        <div class="score-label">你的嘉豪人格浓度为</div>
-        <div class="score" id="final-score">0%</div>
-        <div class="desc-box">
-            <span class="desc-title" id="final-tier"></span>
-            <div class="desc-content" id="final-desc"></div>
+        <div id="quiz-container" style="display: none;">
+            <div class="progress"><div id="progress-bar"></div></div>
+            <div id="question-box"></div>
         </div>
-        <button class="restart-btn" onclick="location.reload()">清除记忆，重新拿捏</button>
+
+        <div id="result">
+            <h2 style="color: #fff; margin-bottom: 20px;">诊断报告生成完毕</h2>
+            
+            <div class="mbti-card">
+                <div class="mbti-type" id="mbti-letters">XXXX</div>
+                <div class="mbti-name" id="mbti-title">正在生成称号...</div>
+                <div class="score-box">嘉豪浓度指数：<span id="final-score">0%</span></div>
+                
+                <div class="mbti-desc" id="mbti-desc"></div>
+                
+                <div style="text-align: left; color: var(--primary-color); font-size: 14px; margin-bottom: 8px;">▼ 深度人格剖析 (上下滑动查看)</div>
+                <div class="mbti-analysis" id="mbti-analysis"></div>
+            </div>
+
+            <button class="restart-btn" onclick="location.reload()">不服？换个号再测</button>
+        </div>
     </div>
 </div>
 
 <script>
-// 25道男女通用版题库（内容保持不变，确保共性）
+// 25道题库
 const questions = [
-    // ... （此处省略25道题目的具体内容，保持上一版的代码不变，以节省篇幅，实际运行时请保留完整题库）
-    // 为了保证代码可运行，这里必须贴上完整的题目数组，哪怕内容和上一版一样
     { q: "在聚会上，你发现有个人偷偷看了你两眼，你的第一反应是？", a: ["一定是看上我了，或者被我的气质吸引了", "可能是我衣服穿反了，或者脸上沾了东西", "只是碰巧视线交汇吧，无所谓", "我也看回去，并送上一个意味深长的微笑"], s: [4, 0, 1, 3] },
     { q: "当你发了一张精心P过（或精挑细选）的自拍到朋友圈，半小时没人点赞，你会？", a: ["觉得这届朋友圈不懂欣赏，私信发给几个好朋友‘求赞’", "火速删掉，觉得有点丢人", "在自己评论区留言：‘原相机直出，状态不太好’", "不管它，懂我的美/帅的人自然懂"], s: [3, 0, 4, 2] },
     { q: "如果有人对你说‘你这人挺有意思的’，你会觉得？", a: ["那当然，我可是万里挑一的有趣灵魂", "他是在客套吧", "他是不是觉得我刚才说错话了？", "回一句：‘你才发现？’"], s: [4, 1, 0, 3] },
@@ -129,6 +146,66 @@ let currentIdx = 0;
 let totalScore = 0;
 const maxPossibleScore = 100;
 
+// MBTI 八大人格与300字深度解析
+const mbtiProfiles = [
+    {
+        threshold: 12, 
+        type: "N.O.R.M",
+        name: "【纯净水路人甲】",
+        shortDesc: "毫无波澜，甚至有点土。你连装杯都装不到点子上，在嘉豪宇宙里，你就是个负责鼓掌的NPC。",
+        detailedAnalysis: "在这场名为“装杯”的盛大狂欢中，你是一股格格不入的清流，或者说，你就是那个无人在意的背景板。你的性格底色是老实、真诚、甚至有些乏味。在社交场合，当别人都在绞尽脑汁地寻找最佳角度露出名表，或者用四六级词汇包装自己的“底层逻辑”时，你可能只是在角落里默默地思考今晚的外卖吃什么。你对所谓的高级感、松弛感过敏，你的朋友圈干净得就像刚出厂的手机，除了转发几条工作链接或者毫无美感的风景照，再无其他。在“嘉豪学”的评价体系里，你属于“毫无拿捏价值”的零段位选手。你缺乏那种自我包装的野心，也懒得去揣摩那些云山雾罩的社交潜规则。虽然这让你在那些高端玩家眼中显得有些“土气”和“没故事”，但请不要自卑。在这个人人都在立人设、强行装深沉的时代，你的这份平凡和毫无滤镜的真实，反而是一种稀缺资源。只是，下次参加聚会时，可以试着稍微端起一点架子，不然真的很容易被当成端茶倒水的服务员。"
+    },
+    {
+        threshold: 25, 
+        type: "C.H.I.L",
+        name: "【强行松弛小丑】",
+        shortDesc: "试图展现出“老子不在乎”，但紧绷的嘴角和躲闪的眼神出卖了你。强行松弛，最为致命。",
+        detailedAnalysis: "你的性格里潜藏着一种让人心疼的矛盾感。你其实非常在乎外界的眼光，极度渴望得到他人的认可和关注，但你的自尊心又绝不允许你表现出这份渴望。于是，你选择了“强行松弛”作为你的保护色。你试图在社交平台上营造出一种“根本不在乎”的洒脱气质，但在现实中，你的每一次发言、每一个动作都在暗中观察别人的反应。你会在发朋友圈前纠结半小时该用什么滤镜，发完后又因为五分钟没人点赞而陷入自我怀疑，最后装作若无其事地仅自己可见。你的这种“松弛感”就像是穿了一件尺码小两号的紧身衣，不仅自己勒得喘不过气，旁人看着也替你憋得慌。在别人眼里，你那些刻意为之的满不在乎、欲言又止的深夜emo，不仅没有增加你的神秘感，反而像是一个演技拙劣的小丑在努力证明自己有故事。放轻松点吧，真正的松弛是允许自己普通，承认自己在乎。别再硬撑着去演那出没人看的独角戏了，承认自己是个俗人，绝对能让你活得轻松很多。"
+    },
+    {
+        threshold: 37, 
+        type: "P.O.S.E",
+        name: "【欲言又止气氛组】",
+        shortDesc: "装杯基因正在觉醒，但实力严重跟不上野心。像个偷穿大人衣服的小孩，浑身透着清澈的做作。",
+        detailedAnalysis: "你正处于装杯之路的觉醒期，可以说是“又菜又爱玩”的典型代表。在你的认知系统里，你已经敏锐地察觉到了高端社交的流量密码——那就是要端着，要有态度。你开始刻意模仿那些社交场上的风云人物：学着用斜眼看人，学着在聚会上保持沉默以彰显高冷，学着在聊天时用“呵呵”、“就那回事吧”来终结话题。然而，你的功力实在太浅，所有的“装”都浮于表面，缺乏内核支撑。你的性格特征就像是那种刚刚学会了几个高级词汇就到处乱用的初学者，浑身上下都散发着一种“快来问问我到底怎么了”的做作气息。当你试图在朋友圈发一些隐晦的网抑云文案，期待别人来关心你时，大多数人只是在心里翻了个白眼然后迅速划过。你太想成为那种焦点人物，却又缺乏一击必杀的实力或幽默感，最终只能沦为社交场上的“气氛组”。你的这些小动作在真正的段位玩家眼里，就像是透明玻璃缸里的金鱼，所有的伪装都一览无余，显得既可怜又有些好笑。"
+    },
+    {
+        threshold: 50, 
+        type: "M.A.Z.E",
+        name: "【懂的都懂谜语人】",
+        shortDesc: "深度沉迷自我感动，认为直白是粗俗的。你用谜语筑起高墙，大家却连翻墙的欲望都没有。",
+        detailedAnalysis: "你是一个深度沉迷于自我感动和自我包装的“谜语人”。你的性格核心在于极度追求所谓的“神秘感”和“边界感”，你认为直白是粗俗的，只有晦涩难懂才能彰显灵魂的深度。在日常社交中，你最擅长的就是故弄玄虚：发一条没有配图只有一串省略号的朋友圈，分享一首极其冷门且旋律诡异的纯音乐，或者在别人询问你意见时，给出一个“懂的都懂，细品”的万能敷衍句。你幻想着自己是一个有着复杂过去和深邃思想的隐士，周围的人都在费尽心思地想要猜透你。但残酷的现实是，你的这种行为在心理学上只是为了掩饰自己内心的空虚和表达能力的匮乏。大家并不是猜不透你，而是根本懒得猜。你那所谓的“高维认知”和“小众品味”，往往只是为了让自己在平凡的生活中显得不那么平庸。你的性格中带有一种脆弱的傲慢，你用谜语筑起高墙，却又在墙后偷偷张望是否有人愿意翻墙来看你。醒醒吧，这个世界上没有那么多闲人愿意去解开你那毫无营养的无聊密码。"
+    },
+    {
+        threshold: 63, 
+        type: "P.H.I.L",
+        name: "【朋友圈哲学导师】",
+        shortDesc: "理论缝合怪，爹味/妈味超标。总觉得自己看透了事物的本质，迫不及待要给凡人开光。",
+        detailedAnalysis: "你是社交圈里令人闻风丧胆的“说教狂魔”和“理论缝合怪”。你的性格极度自负，有着极强的表现欲和控制欲。你总觉得自己看透了事物的本质，掌握了世界的真理，并且迫不及待地想要给周围的“凡人”开光。你的日常就是用各种商业术语、心理学词汇和成功学鸡汤来武装自己。别人跟你抱怨今天奶茶不好喝，你能从情绪价值扯到供应链的底层逻辑，再升华到人生的认知颗粒度。你自以为是圈子里的意见领袖和指路明灯，实际上你的爹味/妈味已经严重超标，让人感到极度窒息。你极度缺乏同理心，你根本不在乎别人的真实感受，你只在乎自己说教时的姿态是否足够帅气，逻辑是否足够“闭环”。在你的潜意识里，你试图通过贬低他人的认知来抬高自己的社交地位。这种将无知当个性的自信，简直是嘉豪宇宙里的一股泥石流。建议你停止四处散播你那所谓的“人生大智慧”，多读点正经书，少看点短视频里的“财富自由之道”。"
+    },
+    {
+        threshold: 75, 
+        type: "R.I.C.H",
+        name: "【高冷拼单名媛/少爷】",
+        shortDesc: "虚荣心爆棚的视觉欺诈师。每一张照片都经过严密的折叠空间计算，只为露出带Logo的边角。",
+        detailedAnalysis: "你的性格被极度的物质虚荣和精心设计的社交人设完全吞噬。你信奉“颜值即正义，资产即真理”，致力于在互联网上打造一个多金、慵懒、且品味高雅的“老钱风”人设。你对名牌的Logo、限量版的型号、高端餐厅的隐藏菜单如数家珍。你发朋友圈的每一个像素都是经过精密计算的，看似漫不经心的一张自拍，实则构图的中心永远是那块名表或者那个包包的搭扣。你极度害怕被别人看穿你的底牌，所以你总是用冷漠和高傲来伪装自己内心的极度不安全感。你鄙视那些粗糙的普通人，却又必须依赖他们的羡慕和嫉妒来获取情绪价值。你的性格中充满了一种病态的精致利己主义，你把社交当成是一场资源的展示和互换。然而，这种依靠外在物质堆砌起来的自信是极其脆弱的。一旦剥离了这些奢侈品的伪装，你可能连面对真实自己的勇气都没有。你活在自己编织的粉红泡沫里，享受着虚假的赞美，却早已忘记了脚踏实地的生活是什么滋味。"
+    },
+    {
+        threshold: 88, 
+        type: "K.I.N.G",
+        name: "【街头野生海王星】",
+        shortDesc: "油腻界的战斗机，做作界的祖师爷！普信到了极点，偏偏觉得自己是不可替代的白月光。",
+        detailedAnalysis: "恭喜你，你的“普信”浓度已经达到了让常人感到生理不适的警戒线！你的性格可以说是自我中心主义的终极完全体。你坚定地认为自己是这个世界的主角，拥有着让异性飞蛾扑火般的致命魅力。你的每一次出场，都仿佛自带BGM和慢动作特写；你的每一个眼神，都自认为是深情款款的霸总/顶流附体。你极度缺乏自知之明，将别人的礼貌当作好感，将别人的无语当作是被你气场震慑。在社交中，你总是习惯性地占据主导地位，喜欢通过打压他人、炫耀经历来彰显自己的优越感。你所谓的“真性情”，不过是粗鲁和不顾及他人感受的遮羞布。你活在一个巨大的“楚门的世界”里，而你是唯一的导演兼主演。你最可怕的地方在于，你对自己的油腻和做作一无所知，甚至以此为荣。你就像是社交场上的一颗定时炸弹，无论走到哪里都能引发一阵令人窒息的尴尬风暴。能做到如此极致的盲目自信，在某种程度上，你也算得上是个千年难遇的奇才了。"
+    },
+    {
+        threshold: 100, 
+        type: "J.I.A.H",
+        name: "【大乘期纯血天龙人】",
+        shortDesc: "系统炸了！你的存在就是对全人类审美的降维打击，互联网的王座空悬太久，就等您来坐了！",
+        detailedAnalysis: "扑通！全体起立！恭迎格局大帝登基！你的性格已经无法用人类的语言来准确定义了，你本身就是一门博大精深的玄学，是互联网装杯文化的活化石！你已经超越了简单的虚荣和自负，达到了一种“我即是世界，我即是真理”的化境。在你的认知体系里，地球是绕着你转的，你的每一次心跳都在为这个世界赋能。你将“做作”升华成了艺术，将“油腻”沉淀成了底蕴。无论是你那标志性的三分讥笑、七分薄凉的眼神，还是你张口就来的“格局打开”、“你不懂我”，都已经彻底刻入了你的DNA。你不是在扮演嘉豪，你就是嘉豪本豪！你拥有一种无视一切世俗嘲笑的强大心理防御机制，别人的任何攻击，在你看来都只是因为他们嫉妒你、仰望你。你活得如此肆意妄为，如此抓马且惊世骇俗，以至于让所有见识过你威力的人都感到灵魂颤栗。你已经彻底脱离了低级趣味，成为了一种抽象的图腾。这个平庸的世界配不上你那四溢的才华，请原地飞升吧！"
+    }
+];
+
 function startQuiz() {
     document.getElementById('start-screen').style.display = 'none';
     document.getElementById('quiz-container').style.display = 'block';
@@ -143,7 +220,7 @@ function showQuestion() {
     progress.style.width = ((currentIdx / questions.length) * 100) + "%";
     
     let html = `<div class="question active">
-        <div class="q-text">第 ${currentIdx + 1} 题：${q.q}</div>
+        <div class="q-text">第 ${currentIdx + 1} / 25 题：<br>${q.q}</div>
         <div class="options">`;
     q.a.forEach((opt, index) => {
         html += `<button class="option-btn" onclick="next(${q.s[index]})">${opt}</button>`;
@@ -170,6 +247,14 @@ function showResult() {
     
     const finalPercent = Math.min(Math.round((totalScore / maxPossibleScore) * 100), 100);
     
+    let profile = mbtiProfiles[0];
+    for (let i = 0; i < mbtiProfiles.length; i++) {
+        if (finalPercent <= mbtiProfiles[i].threshold) {
+            profile = mbtiProfiles[i];
+            break;
+        }
+    }
+    
     let currentScore = 0;
     const scoreElement = document.getElementById('final-score');
     const timer = setInterval(() => {
@@ -182,28 +267,12 @@ function showResult() {
         }
     }, 30);
 
-    let tier = "";
-    let desc = "";
-    
-    // --- 结果评价注入大量嘉豪色彩词汇 ---
-    if(finalPercent < 20) {
-        tier = "【凡人段位 / 格局归零】";
-        desc = "<b>拿捏失败。</b>你体内几乎没有嘉豪基因。你是一个踏实、真诚且清醒的普通人。在嘉豪眼中，你是一个‘不懂得包装自己、格局太小’的凡夫俗子。你太真，真到不需要任何做作的修饰，这在“嘉豪学”里叫<b>‘没故事’</b>。";
-    } else if(finalPercent < 50) {
-        tier = "【隐性嘉豪 / 薛定谔的格局】";
-        desc = "<b>有点意思，但不多。</b>你平时看起来很正常，但在某些特定的时刻（例如深夜、或者遇到心仪的异性），你体内的<b>‘深情抗体’</b>就会失效。偶尔会冒出一两句做作的语录，或者摆出一些强凹的造型。注意控油，你的格局还在<b>‘懂的都懂’</b>的萌芽阶段。";
-    } else if(finalPercent < 80) {
-        tier = "【半步王者 / 眼神拿捏大师】";
-        desc = "<b>成了！兄弟/姐妹，你的格局已经打开了！</b>你举手投足间那股三分讥笑七分薄凉的气质，已经拿捏得十分到位。你的一条朋友圈，起码需要凡人细品半小时。你不是在装杯，你觉得这就是你理解的<b>‘仪式感’</b>。继续保持，王座在向你招手。";
-    } else {
-        tier = "【嘉豪本豪 / 大乘格局大帝】";
-        desc = "<b>卧槽！这浓度爆表了！</b>系统检测到你的嘉豪基因已经突破天际！你是行走的荷尔蒙/人间富贵花，你是凡人眼中的光。你那眼神里的忧郁与自信，足以整顿整个互联网的审美。别测了，赶紧去开直播，去拍段子，去展现你那<b>‘无法安放的真性情’</b>。互联网需要你这样的王者来拿捏！";
-    }
-    
     setTimeout(() => {
-        document.getElementById('final-tier').innerText = tier;
-        document.getElementById('final-desc').innerHTML = desc;
-    }, 500);
+        document.getElementById('mbti-letters').innerText = profile.type;
+        document.getElementById('mbti-title').innerText = profile.name;
+        document.getElementById('mbti-desc').innerText = profile.shortDesc;
+        document.getElementById('mbti-analysis').innerText = profile.detailedAnalysis;
+    }, 400);
 }
 </script>
 
